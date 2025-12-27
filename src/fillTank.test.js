@@ -85,6 +85,23 @@ describe('fillTank', () => {
       });
   });
 
+  it('should round the price of the purchased fuel to the nearest hundredth part', () => {
+    const customer = getCustomer(3000, 40, 0);
+    const fuelPrice = 37.777;
+    const amount = 15;
+
+    fillTank(customer, fuelPrice, amount);
+
+    expect(customer)
+      .toEqual({
+        money: 3000 - 566.66,
+        vehicle: {
+          maxTankCapacity: 40,
+          fuelRemains: 15,
+        },
+      });
+  });
+
   it('should not pour at all if the poured amount is less than 2 liters', () => {
     const customer = getCustomer(3000, 40, 0);
     const fuelPrice = 40;
@@ -114,23 +131,6 @@ describe('fillTank', () => {
         vehicle: {
           maxTankCapacity: 40,
           fuelRemains: 0,
-        },
-      });
-  });
-
-  it('should round the price of the purchased fuel the to the nearest hundredth part', () => {
-    const customer = getCustomer(3000, 40, 0);
-    const fuelPrice = 40.5555;
-    const amount = 40;
-
-    fillTank(customer, fuelPrice, amount);
-
-    expect(customer)
-      .toEqual({
-        money: 1377.78,
-        vehicle: {
-          maxTankCapacity: 40,
-          fuelRemains: 40,
         },
       });
   });
