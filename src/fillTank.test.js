@@ -34,7 +34,7 @@ describe('fillTank', () => {
       });
   });
 
-  it('should pour only what will fit if the amount is greater than thr tank can accommodate', () => {
+  it('should pour only what will fit if amount exceeds tank capacity', () => {
     const customer = getCustomer(3000, 40, 32);
     const fuelPrice = 40;
     const amount = 10;
@@ -69,7 +69,7 @@ describe('fillTank', () => {
   });
 
   it('should round the poured amount by discarding number to the tenth part', () => {
-    const customer = getCustomer(260, 40, 0);
+    const customer = getCustomer(270, 40, 0);
     const fuelPrice = 40;
     const amount = 10;
 
@@ -77,10 +77,10 @@ describe('fillTank', () => {
 
     expect(customer)
       .toEqual({
-        money: 0,
+        money: 2,
         vehicle: {
           maxTankCapacity: 40,
-          fuelRemains: 6.5,
+          fuelRemains: 6.7,
         },
       });
   });
@@ -95,6 +95,22 @@ describe('fillTank', () => {
     expect(customer)
       .toEqual({
         money: 3000,
+        vehicle: {
+          maxTankCapacity: 40,
+          fuelRemains: 0,
+        },
+      });
+  });
+
+  it('should not pour at all if the poured amount is less than 2 liters', () => {
+    const customer = getCustomer(50, 40, 0);
+    const fuelPrice = 40;
+
+    fillTank(customer, fuelPrice);
+
+    expect(customer)
+      .toEqual({
+        money: 50,
         vehicle: {
           maxTankCapacity: 40,
           fuelRemains: 0,
